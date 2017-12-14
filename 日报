@@ -46,8 +46,8 @@ Dim fsc_time As Single              'full screen通常用时
 Dim fsc_time_over As Single         'full screen加班用时
 Dim cot_time As Single              '接续通常用时
 Dim cot_time_over As Single         '接续加班用时
-Dim elc_time As Single              '电变通常用时
-Dim elc_time_over As Single         '电变加班用时
+Dim elc_time As Single              'dianbian通常用时
+Dim elc_time_over As Single         'dianbian加班用时
 Dim sid_time As Single              'string id通常用时
 Dim sid_time_over As Single         'string id加班用时
 Dim bkp_time As Single              'back up通常用时
@@ -297,7 +297,7 @@ Else
     Cells(10, 6) = 0
 End If
 
-'电变相关数据
+'dianbian相关数据
 Cells(11, 4) = elc_yuji
 Cells(11, 5) = elc_shiji
 'Cells(11, 9) = elc_time + elc_time_over
