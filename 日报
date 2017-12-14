@@ -1,0 +1,369 @@
+Sub amount_today()
+
+Dim sht_line As Integer         '遍历当前sheet里的行数
+Dim sht_number As Integer       '遍历当前工作薄里的sheet数
+
+Dim case_type_line As Integer   '遍历当天case类型
+
+Dim fun_yuji As Integer         'fun预计总数
+Dim fun_shiji As Integer        'fun实际总数
+Dim ope_yuji As Integer         'ope预计总数
+Dim ope_shiji As Integer        'ope实际总数
+Dim mtx_yuji As Integer         'mtx预计总数
+Dim mtx_shiji As Integer        'mtx实际总数
+Dim flw_yuji As Integer         'flow预计总数
+Dim flw_shiji As Integer        'flow实际总数
+Dim fsc_yuji As Integer         'full screen预计总数
+Dim fsc_shiji As Integer        'full screen实际总数
+Dim cot_yuji As Integer         '接续预计总数
+Dim cot_shiji As Integer        '接续实际总数
+Dim elc_yuji As Integer         '电变预计总数
+Dim elc_shiji As Integer        '电变实际总数
+Dim sid_yuji As Integer         'string id预计总数
+Dim sid_shiji As Integer        'string id实际总数
+Dim bkp_yuji As Integer         'back up预计总数
+Dim bkp_shiji As Integer        'back up实际总数
+Dim pef_yuji As Integer         '性能预计总数
+Dim pef_shiji As Integer        '性能实际总数
+Dim rgt_yuji As Integer         '回归测试预计总数
+Dim rgt_shiji As Integer        '回归测试实际总数
+
+Dim bug As Integer              'bug数
+
+Dim fun_time As Single              'fun通常用时
+Dim fun_time_over As Single         'fun加班用时
+Dim ope_time As Single              'ope通常用时
+Dim ope_time_over As Single         'ope加班用时
+Dim mtx_time As Single              'mtx通常用时
+Dim mtx_time_over As Single         'mtx加班用时
+Dim rdm_time As Single              'rdm通常用时
+Dim rdm_time_over As Single         'rmd加班用时
+Dim wkl_time As Single              'wkl通常用时
+Dim wkl_time_over As Single         'wkl加班用时
+Dim flw_time As Single              'flow通常用时
+Dim flw_time_over As Single         'flow加班用时
+Dim fsc_time As Single              'full screen通常用时
+Dim fsc_time_over As Single         'full screen加班用时
+Dim cot_time As Single              '接续通常用时
+Dim cot_time_over As Single         '接续加班用时
+Dim elc_time As Single              '电变通常用时
+Dim elc_time_over As Single         '电变加班用时
+Dim sid_time As Single              'string id通常用时
+Dim sid_time_over As Single         'string id加班用时
+Dim bkp_time As Single              'back up通常用时
+Dim bkp_time_over As Single         'back up加班用时
+Dim pef_time As Single              '性能通常用时
+Dim pef_time_over As Single         '性能加班用时
+Dim rgt_time As Single              '回归测试通常时间
+Dim rgt_time_over As Single         '回归测试加班时间
+
+Dim itoday As Date              '获取日期
+
+'所有数据初始为0
+fun_yuji = 0
+fun_shiji = 0
+ope_yuji = 0
+ope_shiji = 0
+mtx_yuji = 0
+mtx_shiji = 0
+flw_yuji = 0
+flw_shiji = 0
+fsc_yuji = 0
+fsc_shiji = 0
+cot_yuji = 0
+cot_shiji = 0
+elc_yuji = 0
+elc_shiji = 0
+sid_yuij = 0
+sid_shiji = 0
+bkp_yuji = 0
+bkp_shiji = 0
+pef_yuji = 0
+pef_shiji = 0
+rgt_yuji = 0
+rgt_shiji = 0
+
+bug = 0
+
+fun_time = 0
+fun_time_over = 0
+ope_time = 0
+ope_time_over = 0
+mtx_time = 0
+mtx_time_over = 0
+rdm_time = 0
+rdm_time_over = 0
+wkl_time = 0
+wkl_time_over = 0
+flw_time = 0
+flw_time_over = 0
+fsc_time = 0
+fsc_time_over = 0
+cot_time = 0
+cot_time_over = 0
+elc_time = 0
+elc_time_over = 0
+sid_time = 0
+sid_time_over = 0
+bkp_time = 0
+bkp_time_over = 0
+pef_time = 0
+pef_time_over = 0
+rgt_time = 0
+rgt_time_over = 0
+
+'获得当天日期
+itoday = Date
+
+
+file_of_folder = Dir(ThisWorkbook.Path & "\*.xls")    '搜索当前路径里的文件
+Do While file_of_folder > " "
+    If file_of_folder <> ThisWorkbook.Name Then    '如果不是当前工作簿
+        Set wb = Workbooks.Open(ThisWorkbook.Path & "\" & file_of_folder)    '打开工作簿
+        For sht_number = 1 To wb.Sheets.Count    '循环工作表
+            wb.Sheets(sht_number).Activate
+            For sht_line = 2 To 500     '从第2行到100行
+                       
+                '是当天日期后，分别获取当天的各类数据
+                If wb.Sheets(sht_number).Cells(sht_line, 2) = itoday Then
+                    For case_type_line = 1 To 7             '每日case类型最多5中
+                        Select Case wb.Sheets(sht_number).Cells((sht_line + case_type_line), 7).Text
+                            Case "FUN"
+                                fun_yuji = fun_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                fun_shiji = fun_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                fun_time = fun_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                fun_time_over = fun_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "OPE"
+                                ope_yuji = ope_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                ope_shiji = ope_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                ope_time = ope_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                ope_time_over = ope_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "MTX"
+                                mtx_yuji = mtx_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                mtx_shiji = mtx_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                mtx_time = mtx_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                mtx_time_over = mtx_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "RDM"
+                                rdm_time = rdm_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                rdm_time_over = rdm_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "WKL"
+                                wkl_time = wkl_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                wkl_time_over = wkl_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "FLW"
+                                flw_yuji = flw_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                flw_shiji = flw_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                flw_time = flw_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                flw_time_over = flw_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "FSC"
+                                fsc_yuji = fsc_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                fsc_shiji = fsc_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                fsc_time = fsc_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                fsc_time_over = fsc_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "COT"
+                                cot_yuji = cot_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                cot_shiji = cot_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                cot_time = cot_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                cot_time_over = cot_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "ELC"
+                                elc_yuji = elc_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                elc_shiji = elc_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                elc_time = elc_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                elc_time_over = elc_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "SID"
+                                sid_yuji = sid_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                sid_shiji = sid_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                sid_time = sid_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                sid_time_over = sid_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "BAC"
+                                bkp_yuji = bkp_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                bkp_shiji = bkp_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                bkp_time = bkp_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                bkp_time_over = bkp_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "PEF"
+                                pef_yuji = pef_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                pef_shiji = pef_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                pef_time = pef_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                pef_time_over = pef_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                            Case "RGT"
+                                rgt_yuji = rgt_yuji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 8)
+                                rgt_shiji = rgt_shiji + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 9)
+                                rgt_time = rgt_time + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 12)
+                                rgt_time_over = rgt_time_over + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 14)
+                                bug = bug + wb.Sheets(sht_number).Cells((sht_line + case_type_line), 13)
+                        End Select
+                    Next
+                Else
+                    End If
+                                       
+                                       
+            Next
+        Next
+        wb.Close True    '关闭并保存Open语句所打开的工作薄
+    Else
+        End If
+file_of_folder = Dir
+Loop
+
+'fun相关数据
+Cells(3, 4) = fun_yuji
+Cells(3, 5) = fun_shiji
+'Cells(3, 9) = fun_time + fun_time_over
+Cells(3, 9) = fun_time
+'Cells(3, 10) = fun_time_over
+
+If (fun_yuji - fun_shiji) > 0 Then
+    Cells(3, 6) = fun_yuji - fun_shiji
+Else
+    Cells(3, 6) = 0
+End If
+
+'ope相关数据
+Cells(4, 4) = ope_yuji
+Cells(4, 5) = ope_shiji
+'Cells(4, 9) = ope_time + ope_time_over
+Cells(4, 9) = ope_time
+
+If (ope_yuji - ope_shiji) > 0 Then
+    Cells(4, 6) = ope_yuji - ope_shiji
+Else
+    Cells(4, 6) = 0
+End If
+
+'mtx相关数据
+Cells(5, 4) = mtx_yuji
+Cells(5, 5) = mtx_shiji
+'Cells(5, 9) = mtx_time + mtx_time_over
+Cells(5, 9) = mtx_time
+
+If (mtx_yuji - mtx_shiji) > 0 Then
+    Cells(5, 6) = mtx_yuji - mtx_shiji
+Else
+    Cells(5, 6) = 0
+End If
+
+'rdm相关数据
+'Cells(6, 9) = rdm_time + rdm_time_over
+Cells(6, 9) = rdm_time
+
+'wkl相关数据
+'Cells(7, 9) = wkl_time + wkl_time_over
+Cells(7, 9) = wkl_time
+
+'flw相关数据
+Cells(8, 4) = flw_yuji
+Cells(8, 5) = flw_shiji
+'Cells(8, 9) = flw_time + flw_time_over
+Cells(8, 9) = flw_time
+
+If (flw_yuji - flw_shiji) > 0 Then
+    Cells(8, 6) = flw_yuji - flw_shiji
+Else
+    Cells(8, 6) = 0
+End If
+
+'full screen相关数据
+Cells(9, 4) = fsc_yuji
+Cells(9, 5) = fsc_shiji
+'Cells(9, 9) = fsc_time + fsc_time_over
+Cells(9, 9) = fsc_time
+
+If (fsc_yuji - fsc_shiji) > 0 Then
+    Cells(9, 6) = fsc_yuji - fsc_shiji
+Else
+    Cells(9, 6) = 0
+End If
+
+'接续相关数据
+Cells(10, 4) = cot_yuji
+Cells(10, 5) = cot_shiji
+'Cells(10, 9) = cot_time + cot_time_over
+Cells(10, 9) = cot_time
+
+If (cot_yuji - cot_shiji) > 0 Then
+    Cells(10, 6) = cot_yuji - cot_shiji
+Else
+    Cells(10, 6) = 0
+End If
+
+'电变相关数据
+Cells(11, 4) = elc_yuji
+Cells(11, 5) = elc_shiji
+'Cells(11, 9) = elc_time + elc_time_over
+Cells(11, 9) = elc_time
+
+If (elc_yuji - elc_shiji) > 0 Then
+    Cells(11, 6) = elc_yuji - elc_shiji
+Else
+    Cells(11, 6) = 0
+End If
+
+'string id相关数据
+Cells(12, 4) = sid_yuji
+Cells(12, 5) = sid_shiji
+'Cells(12, 9) = sid_time + sid_time_over
+Cells(12, 9) = sid_time
+
+If (sid_yuji - sid_shiji) > 0 Then
+    Cells(12, 6) = sid_yuji - sid_shiji
+Else
+    Cells(12, 6) = 0
+End If
+
+'back up相关数据
+Cells(13, 4) = bkp_yuji
+Cells(13, 5) = bkp_shiji
+'Cells(13, 9) = bkp_time + bkp_time_over
+Cells(13, 9) = bkp_time
+
+If (bkp_yuji - bkp_shiji) > 0 Then
+    Cells(13, 6) = bkp_yuji - bkp_shiji
+Else
+    Cells(13, 6) = 0
+End If
+
+'性能相关数据
+Cells(14, 4) = pef_yuji
+Cells(14, 5) = pef_shiji
+'Cells(14, 9) = pef_time + pef_time_over
+Cells(14, 9) = pef_time
+
+If (pef_yuji - pef_shiji) > 0 Then
+    Cells(14, 6) = pef_yuji - pef_shiji
+Else
+    Cells(14, 6) = 0
+End If
+
+'回归测试相关数据
+Cells(15, 4) = rgt_yuji
+Cells(15, 5) = rgt_shiji
+Cells(15, 9) = rgt_time
+
+If (rgt_yuji - rgt_shiji) > 0 Then
+    Cells(15, 6) = rgt_yuij - rgt_shiji
+Else
+    Cells(15, 6) = 0
+End If
+
+'总加班时间
+Cells(3, 10) = fun_time_over + ope_time_over + mtx_time_over + rdm_time_over + wkl_time_over + flw_time_over + fsc_time_over + cot_time_over + elc_time_over + sid_time_over + bkp_time_over + pef_time_over + rgt_time_over
+
+'bug总数
+Cells(3, 12) = bug
+
+'写入当天日期
+Cells(3, 2) = itoday
+
+
+End Sub
